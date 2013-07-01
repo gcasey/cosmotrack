@@ -37,7 +37,7 @@ ANALYSIS_TEMPLATES = {
     }
           
 
-class UndefinedException(Exception):
+class IncompleteConfigurationException(Exception):
     pass
 
 class ParseError(Exception):
@@ -46,13 +46,12 @@ class ParseError(Exception):
 def verifyMetaData(obj):
     for key, value in obj.iteritems():
         if key == 'ANALYSISTOOL':
-            
-        try:
-            verifyMetaData(value)
-        except AttributeError:
-            pass
-        if value is None:
-            raise UndefinedException(value)
+            try:
+                verifyMetaData(value)
+            except AttributeError:
+                pass
+        elif value in (None, {}):
+            raise IncompleteConfigurationException('Pair: (%s, %s)' % (key, value))
 
 def yesNoBool(token):
     if token.lower() in ['yes', 'true', 'on', 'enabled']:
