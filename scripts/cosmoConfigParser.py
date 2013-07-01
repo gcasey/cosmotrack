@@ -44,7 +44,13 @@ class ParseError(Exception):
     pass
 
 def verifyMetaData(obj):
-    for _, value in obj.iter_items():
+    for key, value in obj.iteritems():
+        if key == 'ANALYSISTOOL':
+            
+        try:
+            verifyMetaData(value)
+        except AttributeError:
+            pass
         if value is None:
             raise UndefinedException(value)
 
@@ -97,6 +103,8 @@ def parseCosmoConfig(fileobj):
                 result['ANALYSISTOOL'][tokens[1].strip()] = {}
             else:
                 namespace[tokens[0]] = simplifyChunk(tokens[1:])
+
+    verifyMetaData(result)
 
     return result
         
