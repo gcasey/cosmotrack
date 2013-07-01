@@ -32,7 +32,7 @@ TEMPLATE_RESULTS = {
 ANALYSIS_TEMPLATES = {
     'HALOTRACKER' : {
         'BB' : None,
-        'MERGE_TREE_FILE' : None
+        'MERGER_TREE_FILE' : None
         }
     }
           
@@ -45,13 +45,13 @@ class ParseError(Exception):
 
 def verifyMetaData(obj):
     for key, value in obj.iteritems():
-        if key == 'ANALYSISTOOL':
+        if value in (None, {}):
+            raise IncompleteConfigurationException('Pair: (%s, %s)' % (key, value))
+        else:
             try:
                 verifyMetaData(value)
             except AttributeError:
                 pass
-        elif value in (None, {}):
-            raise IncompleteConfigurationException('Pair: (%s, %s)' % (key, value))
 
 def yesNoBool(token):
     if token.lower() in ['yes', 'true', 'on', 'enabled']:
@@ -100,6 +100,12 @@ def parseCosmoConfig(fileobj):
                 continue
             elif tokens[0] == 'ANALYSISTOOL' and len(tokens) > 2 and yesNoBool(tokens[2]):
                 result['ANALYSISTOOL'][tokens[1].strip()] = {}
+            elif tokens[0] == 'INSTANCE_NAME':
+                print tokens[0]
+                try:
+                    namespace.update(ANALYSIS_TEMPLATES[tokens[1]])
+                except KeyError:
+                    pass
             else:
                 namespace[tokens[0]] = simplifyChunk(tokens[1:])
 
