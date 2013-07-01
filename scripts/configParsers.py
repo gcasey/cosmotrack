@@ -18,6 +18,7 @@
 
 import re
 import pprint
+import os
 
 TEMPLATE_RESULTS = {
     "VERSION": None,
@@ -112,13 +113,33 @@ def parseCosmoConfig(fileobj):
     verifyMetaData(result)
 
     return result
+
+def parseIndatParams(fileobj):
+    result = {}
+    
+    for line in fileobj:
+        if len(line) < 1 or line[0] == '#':
+            continue
+        else:
+            tokens = line.split()
+            if len(tokens) < 2:
+                continue
+            result[tokens[0]] = simplifyChunk([tokens[1]])
+    
+    return result
         
-def main(argv):
-    assert len(argv) == 2
-    with open(argv[1], 'r') as fileobj:
-        result = parseCosmoConfig(fileobj)
-        pprint.pprint(result)
+def main(simname, cosmofile, indatfile):
+    simname = simname
+    cosmoParams = parseCosmoConfig(open(cosmofile, 'r'))
+    indatParams = parseIndatParams(open(indatfile, 'r'))
+
+    result = {'SIMULATION_NAME' : simname,
+              'COSMO' : cosmoParams,
+              'INDAT' : indatParams}
+    
+    return result
         
 if __name__ == '__main__':
     import sys
-    main(sys.argv)
+    _r = main(sys.argv[1], sys.argv[2], sys.argv[3])
+    pprint.pprint(_r)
