@@ -8,7 +8,7 @@ module.exports = function (grunt) {
 
         jade: {
             inputDir: 'templates',
-            outputFile: 'built/templates.js'
+            outputFile: 'static/app/js/built/templates.js'
         },
 
         watch: {
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         var task = this;
         var inputFiles = grunt.file.expand(config.inputDir+"/*.jade");
 
-        fs.writeFileSync(outputFile, '\nif (jade.templates === undefined) jade.templates = {};\n;');
+        fs.writeFileSync(outputFile, '\nvar jade=jade || {};jade.templates=jade.templates || {};\n');
 
         inputFiles.forEach(function (filename, i) {
             var buffer = fs.readFileSync(filename);
