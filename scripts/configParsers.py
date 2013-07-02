@@ -21,19 +21,19 @@ import pprint
 import os
 
 TEMPLATE_RESULTS = {
-    "VERSION": None,
-    "VISUALIZATION" : None,
-    "VIZ_SERVER" : None,
-    "VIZ_PORT" : None,
-    "VIZ_FREQUENCY" : None,
-    "ANALYSISTOOL" : {}
+    "version": None,
+    "visualization" : None,
+    "viz_server" : None,
+    "viz_port" : None,
+    "viz_frequency" : None,
+    "analysistool" : {}
     }
 
 # These shoudl contain the required parameters
 ANALYSIS_TEMPLATES = {
-    'HALOTRACKER' : {
-        'BB' : None,
-        'MERGER_TREE_FILE' : None
+    'halotracker' : {
+        'bb' : None,
+        'merger_tree_file' : None
         }
     }
           
@@ -43,6 +43,12 @@ class IncompleteConfigurationException(Exception):
 
 class ParseError(Exception):
     pass
+
+CHARACTER_CONVERTER = re.compile(r'\W')
+
+def convertKeyName(name):
+    name = name.lower()
+    return re.sub(CHARACTER_CONVERTER, '_', name)
 
 def verifyMetaData(obj):
     for key, value in obj.iteritems():
@@ -90,7 +96,8 @@ def parseCosmoConfig(fileobj):
         mobj = SECTION_MATCHER.match(line.strip())
         if mobj:
             name = mobj.group(1)
-            namespace = result['ANALYSISTOOL'][name]
+            name = convertKeyName(name)
+            namespace = result['analysistool'][name]
 
         #Other than section names # are comments
         elif len(line) > 0 and line[0] == '#':
@@ -99,15 +106,18 @@ def parseCosmoConfig(fileobj):
             tokens = line.split()
             if len(tokens) < 2:
                 continue
-            elif tokens[0] == 'ANALYSISTOOL' and len(tokens) > 2 and yesNoBool(tokens[2]):
-                result['ANALYSISTOOL'][tokens[1].strip()] = {}
+            elif tokens[0].lower() == 'analysistool' and len(tokens) > 2 and yesNoBool(tokens[2]):
+                key = convertKeyName(tokens[1].strip())
+                result['analysistool'][key] = {}
             elif tokens[0] == 'INSTANCE_NAME':
                 try:
-                    namespace.update(ANALYSIS_TEMPLATES[tokens[1]])
+                    key = convertKeyName(tokens[1])
+                    namespace.update(ANALYSIS_TEMPLATES[key])
                 except KeyError:
                     pass
             else:
-                namespace[tokens[0]] = simplifyChunk(tokens[1:])
+                key = convertKeyName(tokens[0])
+                namespace[key] = simplifyChunk(tokens[1:])
 
     verifyMetaData(result)
 
@@ -123,7 +133,8 @@ def parseIndatParams(fileobj):
             tokens = line.split()
             if len(tokens) < 2:
                 continue
-            result[tokens[0]] = simplifyChunk([tokens[1]])
+            key = convertKeyName(tokens[0])
+            result[key] = simplifyChunk([tokens[1]])
     
     return result
         
@@ -132,9 +143,9 @@ def main(simname, cosmofile, indatfile):
     cosmoParams = parseCosmoConfig(open(cosmofile, 'r'))
     indatParams = parseIndatParams(open(indatfile, 'r'))
 
-    result = {'SIMULATION_NAME' : simname,
-              'COSMO' : cosmoParams,
-              'INDAT' : indatParams}
+    result = {'simulation_name' : simname,
+              'cosmo' : cosmoParams,
+              'indat' : indatParams}
     
     return result
         
