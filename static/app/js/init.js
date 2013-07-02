@@ -2,7 +2,6 @@ var ct = {
     routes: {},
     models: {},
     collections: {},
-    views: {},
     controllers: {}
 };
 

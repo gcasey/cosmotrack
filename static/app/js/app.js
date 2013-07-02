@@ -4,6 +4,10 @@ ct.App = Backbone.View.extend({
     initialize: function (settings) {
         this.render();
 
+        new ct.controllers.ResultsController({
+            el: '#ct-main-content'
+        }).render();
+
         Backbone.history.start({
             pushState: false,
             root: settings.root
