@@ -51,5 +51,12 @@ module.exports = function (grunt) {
         console.log('Wrote ' + inputFiles.length + ' templates into ' + outputFile);
     });
 
-    grunt.registerTask('default', ['jade']);
+    grunt.registerTask('symlink-packages', 'Add symlink for node modules', function () {
+        if (!fs.existsSync('static/node')) {
+            console.log('Symlink node_modules directory');
+            fs.symlinkSync('../node_modules', 'static/node', 'dir');
+        }
+    });
+
+    grunt.registerTask('default', ['jade', 'symlink-packages']);
 };
