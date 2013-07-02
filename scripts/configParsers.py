@@ -102,7 +102,6 @@ def parseCosmoConfig(fileobj):
             elif tokens[0] == 'ANALYSISTOOL' and len(tokens) > 2 and yesNoBool(tokens[2]):
                 result['ANALYSISTOOL'][tokens[1].strip()] = {}
             elif tokens[0] == 'INSTANCE_NAME':
-                print tokens[0]
                 try:
                     namespace.update(ANALYSIS_TEMPLATES[tokens[1]])
                 except KeyError:
