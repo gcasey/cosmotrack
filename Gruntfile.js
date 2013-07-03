@@ -11,6 +11,12 @@ module.exports = function (grunt) {
             outputFile: 'static/app/js/built/templates.js'
         },
 
+        stylus: {
+            compile: {
+                files: {'static/app/css/built/cosmotrack.css': ['stylesheets/*.styl']}
+            }
+        },
+
         watch: {
             jade: {
                 files: 'templates/*.jade',
@@ -59,5 +65,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['jade', 'symlink-packages']);
+    grunt.registerTask('default', ['jade', 'stylus', 'symlink-packages']);
 };
