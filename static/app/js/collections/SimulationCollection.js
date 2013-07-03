@@ -6,9 +6,7 @@ ct.collections.SimulationCollection = Backbone.Collection.extend({
             url: ct.apiRoot + '/simulation',
             dataType: 'json'
         }).done(_.bind(function (resources) {
-            resources.forEach(_.bind(function (resource) {
-                this.add(resource);
-            }, this));
+            this.add(resources);
         }, this));
     }
 });

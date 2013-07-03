@@ -51,6 +51,7 @@ module.exports = function (grunt) {
         console.log('Wrote ' + inputFiles.length + ' templates into ' + outputFile);
     });
 
+    // Task to create symlink to node_modules in static if it doesn't exist already
     grunt.registerTask('symlink-packages', 'Add symlink for node modules', function () {
         if (!fs.existsSync('static/node')) {
             console.log('Symlink node_modules directory');

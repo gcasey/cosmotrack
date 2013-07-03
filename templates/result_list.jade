@@ -1,1 +1,9 @@
-span result list goes here
+h2.ct-view-header Simulations
+
+if simulations.length == 0
+  span.ct-empty-set-message There are no simulations.
+else
+  .ct-result-accordion
+    each simulation in simulations
+      h3.ct-result-header= simulation.attributes.name
+      div (metadata and links go here...)
