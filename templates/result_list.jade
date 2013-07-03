@@ -5,5 +5,7 @@ if simulations.length == 0
 else
   .ct-result-accordion
     each simulation in simulations
-      h3.ct-result-header= simulation.attributes.name
-      div (metadata and links go here...)
+      h3.ct-accordion-header(simulation-id="#{simulation.id}")= simulation.get('name')
+      .ct-result-container(id="ct-result-container-#{simulation.id}")
+        img(src="app/img/loading.gif")
+        |  Fetching information...
