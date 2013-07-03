@@ -4,7 +4,7 @@ ct.App = Backbone.View.extend({
     initialize: function (settings) {
         this.render();
 
-        new ct.controllers.ResultsController({
+        new ct.views.DashboardView({
             el: '#ct-main-content'
         }).render();
 

@@ -37,16 +37,16 @@ module.exports = function (grunt) {
 
         inputFiles.forEach(function (filename, i) {
             var buffer = fs.readFileSync(filename);
+            var basename = path.basename(filename, '.jade');
+            console.log('Compiling template: ' + basename);
 
             var fn = jade.compile(buffer, {
                 client: true,
                 compileDebug: false
             });
 
-            var basename = path.basename(filename, '.jade');
             var jt = "\njade.templates['" + basename + "'] = " + fn.toString() + ';';
             fs.appendFileSync(outputFile, jt);
-            console.log('Compiled template: ' + basename);
         });
         console.log('Wrote ' + inputFiles.length + ' templates into ' + outputFile);
     });

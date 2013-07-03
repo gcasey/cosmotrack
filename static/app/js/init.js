@@ -2,7 +2,8 @@ var ct = {
     routes: {},
     models: {},
     collections: {},
-    controllers: {}
+    views: {},
+    apiRoot: '/api/v1'
 };
 
 // When all scripts are loaded, we invoke the application
