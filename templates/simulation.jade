@@ -1,3 +1,10 @@
-.ct-simulation-id
-  span #{simulation.id}
-  span  #{simulation.get('name')}
+.ct-sim-action-wrapper
+  button.btn.btn-primary View
+div
+  span
+    b Site:
+    |  #{simulation.get('site')}
+div
+  span
+    b User:
+    |  #{simulation.get('user')}

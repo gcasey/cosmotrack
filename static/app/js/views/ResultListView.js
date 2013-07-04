@@ -13,9 +13,10 @@ ct.views.ResultListView = Backbone.View.extend({
         this.$el.empty().append(jade.templates.result_list({
             simulations: this.collection.models
         }));
-        $('.ct-result-accordion').accordion({
+        this.accordion = $('.ct-result-accordion').accordion({
             active: false,
-            collapsible: true
+            collapsible: true,
+            heightStyle: 'content'
         });
     },
 
