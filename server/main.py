@@ -13,7 +13,6 @@ class Root():
         self.conn = pymongo.Connection()
 
     def GET(self):
-        print '*******'
         return cherrypy.lib.static.serve_file(os.path.join(ROOT_DIR, 'static', 'index.html'),
                                               content_type='text/html')
 
@@ -80,15 +79,11 @@ if __name__ == '__main__':
     config = {
         '/' : {
             'request.dispatch' : cherrypy.dispatch.MethodDispatcher(),
-            'tools.staticdir.root' : '%s/static' % ROOT_DIR
+            'tools.staticdir.root' : ROOT_DIR
             },
-        '/app' : {
+        '/static' : {
             'tools.staticdir.on' : 'True',
-            'tools.staticdir.dir' : 'app',
-            },
-        '/lib' : {
-            'tools.staticdir.on' : 'True',
-            'tools.staticdir.dir' : 'lib',
+            'tools.staticdir.dir' : 'static',
             }
         }
 
