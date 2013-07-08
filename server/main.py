@@ -32,11 +32,11 @@ class Simulation(DBResource):
                                                   #  "source": True,
                                                   #  "analysistool": True})
 
-            
+
             result = [simplify(doc) for doc in simulations]
         else:
             s = self.simcollection.find_one({'_id' : ObjectId(simid)})
-            
+
             result = simplify(s)
 
         return json.dumps(result)
@@ -46,38 +46,36 @@ class Viewable(DBResource):
 
     def GET(self, **params):
         simid = params['simulation_id']
-        
+
         s = self.simcollection.find_one({'_id' : ObjectId(simid)})
         s = s['cosmo']['analysistool']
 
         def simplify():
             pass
-        
+
         return json.dumps(s)
-        
+
 
 if __name__ == '__main__':
     root = Root()
     root.api = Root()
     root.api.v1 = Root()
-    
+
     apiv1 = root.api.v1
     apiv1.simulation = Simulation(root.conn)
     apiv1.viewable = Viewable(root.conn)
 
-    rootDir = os.getcwd()
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config = {
         '/' : {'request.dispatch' : cherrypy.dispatch.MethodDispatcher(),
                'tools.staticdir.root' : rootDir},
         '/index.html' : {'tools.staticfile.on' : True,
                          'tools.staticfile.filename' : '%s/static/index.html' % rootDir},
         '/static' : {'tools.staticdir.on' : True,
-                    'tools.staticdir.dir' : 'static'}
+                     'tools.staticdir.dir' : 'static'}
         }
-    
-    cherrypy.tree.mount(
-        root, '/', config
-        )
+
+    cherrypy.tree.mount(root, '/', config)
 
     cherrypy.engine.start()
     cherrypy.engine.block()
