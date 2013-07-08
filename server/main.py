@@ -20,9 +20,19 @@ class Simulations(DBResource):
         if simid == None:
             # Return list of simulations
             simulations = self.simcollection.find()
-            ids = [str(s['_id']) for s in simulations]
+                                                  # {"_id": True,
+                                                  #  "source": True,
+                                                  #  "analysistool": True})
 
-            result = ids
+            def simplify(doc):
+                return {'_id': str(doc['_id']),
+                        'source': doc['source'],
+                        'analysistool' : doc['cosmo']['analysistool'].keys()}
+
+                doc["_id"] = str(doc["_id"])
+                return doc
+            
+            result = [simplify(doc) for doc in simulations]
         else:
             s = self.simcollection.find_one({'_id' : ObjectId(simid)})
             
