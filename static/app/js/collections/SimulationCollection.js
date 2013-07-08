@@ -3,10 +3,10 @@ ct.collections.SimulationCollection = Backbone.Collection.extend({
 
     initialize: function () {
         ct.restRequest({
-            url: 'simulation'
+            resource: 'simulation'
         }).done(_.bind(function (resources) {
-            console.log(resources);
             this.add(resources);
+            this.trigger('fetched');
         }, this));
     }
 });

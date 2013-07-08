@@ -21,10 +21,10 @@ module.exports = function (grunt) {
                 'app/js/built/templates.js',
                 'app/js/init.js',
 
-                'app/js/models/Analysis.js',
                 'app/js/models/Simulation.js',
-                'app/js/collections/AnalysisCollection.js',
+                'app/js/models/Viewable.js',
                 'app/js/collections/SimulationCollection.js',
+                'app/js/collections/ViewableCollection.js',
                 'app/js/views/ResultListView.js',
                 'app/js/views/DashboardView.js',
                 'app/js/views/SimulationView.js',

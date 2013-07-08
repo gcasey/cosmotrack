@@ -11,7 +11,7 @@ var ct = {
             dataType: 'json',
             type: 'GET'
         };
-        opts.url = ct.apiRoot + opts.url;
+        opts.url = ct.apiRoot + opts.resource;
 
         return Backbone.ajax($.extend(defaults, opts));
     }

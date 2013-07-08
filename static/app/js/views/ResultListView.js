@@ -4,7 +4,7 @@ ct.views.ResultListView = Backbone.View.extend({
     },
 
     initialize: function () {
-        this.collection.on('add', function () {
+        this.collection.on('fetched', function () {
             this.render();
         }, this);
     },
@@ -30,8 +30,8 @@ ct.views.ResultListView = Backbone.View.extend({
 
             new ct.views.SimulationView({
                 el: container,
-                model: this.collection.get(simulationId)
-            }).render();
+                model: this.collection.get(simulationId),
+            });
         }
     }
 });

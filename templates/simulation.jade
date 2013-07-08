@@ -1,5 +1,3 @@
-.ct-sim-action-wrapper
-  button.btn.btn-primary View
 div
   span
     b Site:
@@ -8,3 +6,8 @@ div
   span
     b User:
     |  #{simulation.get('user')}
+
+.ct-viewables-wrapper
+  each viewable in viewables
+    .ct-viewable-container
+      a.ct-viewable-link(viewable-id="#{viewable.id}")= viewable.get('name')

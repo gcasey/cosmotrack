@@ -7,5 +7,5 @@ else
     each simulation in simulations
       h3.ct-accordion-header(simulation-id="#{simulation.id}")= simulation.get('name')
       .ct-result-container(id="ct-result-container-#{simulation.id}")
-        img(src="app/img/loading.gif")
+        img(src="/static/app/img/loading.gif")
         |  Fetching information...
