@@ -12,11 +12,18 @@ class DBResource:
         self.conn = _conn
         self.simcollection = self.conn.cosmodata.simulations
 
-class Simulations(DBResource):
+class Simulation(DBResource):
     exposed = True
 
     def GET(self, simid=None):
         result = None
+
+        def simplify(doc):
+            return {'id': str(doc['_id']),
+                    'name': doc['simulation_name'],
+                    'site': doc['source']['site'],
+                    'user': doc['source']['user']}
+
         if simid == None:
             # Return list of simulations
             simulations = self.simcollection.find()
@@ -24,41 +31,36 @@ class Simulations(DBResource):
                                                   #  "source": True,
                                                   #  "analysistool": True})
 
-            def simplify(doc):
-                return {'_id': str(doc['_id']),
-                        'source': doc['source'],
-                        'analysistool' : doc['cosmo']['analysistool'].keys()}
-
-                doc["_id"] = str(doc["_id"])
-                return doc
             
             result = [simplify(doc) for doc in simulations]
         else:
             s = self.simcollection.find_one({'_id' : ObjectId(simid)})
             
-            result = s
-            del result['_id']
+            result = simplify(s)
+
+        print cherrypy.request.header
 
         return json.dumps(result)
 
-class Viewables(DBResource):
+class Viewable(DBResource):
     exposed = True
 
     def GET(self, **params):
-        simid = params['simulations_id']
-        analysisindex = params['analysis_id']
+        simid = params['simulation_id']
         
         s = self.simcollection.find_one({'_id' : ObjectId(simid)})
-        print s
-        s = s['cosmo']['analysistool'][analysisindex]
+        s = s['cosmo']['analysistool']
+
+        def simplify():
+            pass
         
         return json.dumps(s)
         
 
 if __name__ == '__main__':
     root = Root()
-    root.simulations = Simulations(root.conn)
-    root.viewables = Viewables(root.conn)
+    root.simulation = Simulation(root.conn)
+    root.viewable = Viewable(root.conn)
 
     cherrypy.tree.mount(
         root, '/api/v1', {
