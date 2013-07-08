@@ -39,8 +39,6 @@ class Simulation(DBResource):
             
             result = simplify(s)
 
-        print cherrypy.request.header
-
         return json.dumps(result)
 
 class Viewable(DBResource):
@@ -60,13 +58,17 @@ class Viewable(DBResource):
 
 if __name__ == '__main__':
     root = Root()
-    root.simulation = Simulation(root.conn)
-    root.viewable = Viewable(root.conn)
+    root.api = Root()
+    root.api.v1 = Root()
+    
+    apiv1 = root.api.v1
+    apiv1.simulation = Simulation(root.conn)
+    apiv1.viewable = Viewable(root.conn)
 
     rootDir = os.getcwd()
     config = {
-        '/api/v1' : {'request.dispatch' : cherrypy.dispatch.MethodDispatcher()},
-        '/' : {'tools.staticdir.root' : rootDir},
+        '/' : {'request.dispatch' : cherrypy.dispatch.MethodDispatcher(),
+               'tools.staticdir.root' : rootDir},
         '/index.html' : {'tools.staticfile.on' : True,
                          'tools.staticfile.filename' : '%s/static/index.html' % rootDir},
         '/static' : {'tools.staticdir.on' : True,
