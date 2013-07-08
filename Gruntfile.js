@@ -108,5 +108,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['jade', 'build-js', 'stylus', 'symlink-packages']);
+    grunt.registerTask('default', ['symlink-packages', 'jade', 'stylus', 'build-js']);
 };
