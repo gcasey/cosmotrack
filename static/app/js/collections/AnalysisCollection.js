@@ -3,9 +3,8 @@ ct.collections.AnalysisCollection = Backbone.Collection.extend({
 
     initialize: function (settings) {
 
-        Backbone.ajax({
-            url: ct.apiRoot + '/analysis',
-            dataType: 'json'
+        ct.restRequest({
+            url: 'analysis'
         }).done(_.bind(function (resources) {
             console.log(resources);
             this.add(resources);
