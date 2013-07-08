@@ -6,6 +6,34 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        config: {
+            // The order of this list represents the order of script imports and execution
+            srcList: [
+                // Third-party libraries
+                'lib/js/jquery-1.10.1.min.js',
+                'lib/js/jquery-ui.min.js',
+                'lib/js/bootstrap.min.js',
+                'node/jade/runtime.js',
+                'node/underscore/underscore-min.js',
+                'node/backbone/backbone-min.js',
+
+                // Application imports
+                'app/js/built/templates.js',
+                'app/js/init.js',
+
+                'app/js/models/Analysis.js',
+                'app/js/models/Simulation.js',
+                'app/js/collections/AnalysisCollection.js',
+                'app/js/collections/SimulationCollection.js',
+                'app/js/views/ResultListView.js',
+                'app/js/views/DashboardView.js',
+                'app/js/views/SimulationView.js',
+
+                'app/js/router.js',
+                'app/js/app.js'
+            ]
+        },
+
         jade: {
             inputDir: 'templates',
             outputFile: 'static/app/js/built/templates.js'
@@ -29,6 +57,21 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-stylus');
+
+    // Put all of our js into one file
+    grunt.registerTask('build-js', 'Compile the JS into a single file', function () {
+        var config = grunt.config.get('config');
+        var compiledFile = 'static/app/js/built/cosmotrack.js';
+        if (fs.existsSync(compiledFile)) {
+            fs.unlinkSync(compiledFile);
+        }
+
+        config.srcList.forEach(function (srcFile) {
+            console.log('Appending ' + srcFile)
+            var content = fs.readFileSync('static/' + srcFile);
+            fs.appendFileSync(compiledFile, content + '\n;\n');
+        });
+    });
 
     // Compile the jade templates into a single js file
     grunt.registerTask('jade', 'Build the templates', function (inputFile) {
@@ -65,5 +108,5 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['jade', 'stylus', 'symlink-packages']);
+    grunt.registerTask('default', ['jade', 'build-js', 'stylus', 'symlink-packages']);
 };
