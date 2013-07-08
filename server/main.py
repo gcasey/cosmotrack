@@ -2,6 +2,7 @@ import cherrypy
 import pymongo
 from bson.objectid import ObjectId
 import json
+import os
 
 class Root():
     def __init__(self):
@@ -62,10 +63,18 @@ if __name__ == '__main__':
     root.simulation = Simulation(root.conn)
     root.viewable = Viewable(root.conn)
 
+    rootDir = os.getcwd()
+    config = {
+        '/api/v1' : {'request.dispatch' : cherrypy.dispatch.MethodDispatcher()},
+        '/' : {'tools.staticdir.root' : rootDir},
+        '/index.html' : {'tools.staticfile.on' : True,
+                         'tools.staticfile.filename' : '%s/static/index.html' % rootDir},
+        '/static' : {'tools.staticdir.on' : True,
+                    'tools.staticdir.dir' : 'static'}
+        }
+    
     cherrypy.tree.mount(
-        root, '/api/v1', {
-            '/' : {'request.dispatch' : cherrypy.dispatch.MethodDispatcher()}
-            }
+        root, '/', config
         )
 
     cherrypy.engine.start()
