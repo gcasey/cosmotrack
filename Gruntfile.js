@@ -13,8 +13,8 @@ module.exports = function (grunt) {
                 'lib/js/jquery-1.10.1.min.js',
                 'lib/js/jquery-ui.min.js',
                 'lib/js/bootstrap.min.js',
+                'lib/js/underscore-min.js',
                 'node/jade/runtime.js',
-                'node/underscore/underscore-min.js',
                 'node/backbone/backbone-min.js',
 
                 // Application imports
