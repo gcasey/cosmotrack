@@ -5,10 +5,14 @@ class Simulation(RestResource):
     exposed = True
 
     def simplify(self, doc):
+        analysis = doc['cosmo']['analysistool']
+        analysis = [str(a['_id']) for a in analysis.itervalues()]
+
         return {'id': str(doc['_id']),
                 'name': doc['simulation_name'],
                 'site': doc['source']['site'],
-                'user': doc['source']['user']}
+                'user': doc['source']['user'],
+                'analysis_ids' : analysis}
 
     @RestResource.endpoint
     def GET(self, simid=None):

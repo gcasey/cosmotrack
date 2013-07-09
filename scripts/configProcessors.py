@@ -1,6 +1,17 @@
 import collections
+import bson
+
+def idify_analysis(document):
+    document = document.copy()
+
+    for _, info in document['cosmo']['analysistool'].iteritems():
+        info['_id'] = bson.objectid.ObjectId()
+
+    return document
 
 def process_timesteps(document):
+    document = document.copy()
+
     for _, info in document['cosmo']['analysistool'].iteritems():
         freq_type = info['frequency_type']
 

@@ -18,6 +18,7 @@ if __name__ == "__main__":
 
     document = configParsers.main(sys.argv[1], sys.argv[2], sys.argv[3])
     document = configProcessors.process_timesteps(document)
+    document = configProcessors.idify_analysis(document)
 
     # HACK in extra data that we might need
     document['source'] = {'site' : 'localhost',
