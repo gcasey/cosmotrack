@@ -1,8 +1,9 @@
 import cherrypy
 import pymongo
-from bson.objectid import ObjectId
-import json
 import os
+
+from simulation import Simulation
+from viewable import Viewable
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -18,69 +19,6 @@ class Root():
 
 class Node():
     pass
-
-class RestResource:
-    def __init__(self, _conn):
-        self.conn = _conn
-        self.simcollection = self.conn.cosmodata.simulations
-
-    def simplify(self, obj):
-        return obj
-
-    @classmethod
-    def endpoint(cls, fun):
-        def wrapper(self, *args, **kwargs):
-            val = fun(self, *args, **kwargs)
-
-            accepts = cherrypy.request.headers.elements('Accept')
-            for accept in accepts:
-                if accept.value == 'application/json':
-                    break
-                elif accept.value == 'text/html':
-                    # Pretty-print and HTMLify the response for display in browser
-                    resp = json.dumps(val, indent=4, sort_keys=True, separators=(',', ': '))
-                    resp = resp.replace(' ', '&nbsp;').replace('\n', '<br />')
-                    resp = '<div style="font-family: monospace">' + resp + '</div>'
-                    return resp
-
-            #Default behavior will just be normal JSON output
-            return json.dumps(val)
-        return wrapper
-
-class Simulation(RestResource):
-    exposed = True
-
-    def simplify(self, doc):
-        return {'id': str(doc['_id']),
-                'name': doc['simulation_name'],
-                'site': doc['source']['site'],
-                'user': doc['source']['user']}
-
-    @RestResource.endpoint
-    def GET(self, simid=None):
-        result = None
-
-        if simid == None:
-            # Return list of simulations
-            simulations = self.simcollection.find()
-            result = [self.simplify(doc) for doc in simulations]
-        else:
-            s = self.simcollection.find_one({'_id' : ObjectId(simid)})
-            result = self.simplify(s)
-
-        return result
-
-class Viewable(RestResource):
-    exposed = True
-
-    @RestResource.endpoint
-    def GET(self, **params):
-        simid = params['simulation_id']
-
-        s = self.simcollection.find_one({'_id' : ObjectId(simid)})
-        s = s['cosmo']['analysistool']
-
-        return self.simplify(s)
 
 
 if __name__ == '__main__':
