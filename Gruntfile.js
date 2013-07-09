@@ -14,6 +14,8 @@ module.exports = function (grunt) {
                 'lib/js/jquery-ui.min.js',
                 'lib/js/bootstrap.min.js',
                 'lib/js/underscore-min.js',
+                'lib/js/autobahn.min.js',
+                'lib/js/paraview-all.min.js',
                 'node/jade/runtime.js',
                 'node/backbone/backbone-min.js',
 
@@ -21,6 +23,7 @@ module.exports = function (grunt) {
                 'app/js/built/templates.js',
                 'app/js/init.js',
 
+                'app/js/models/PvSession.js',
                 'app/js/models/Simulation.js',
                 'app/js/models/Viewable.js',
                 'app/js/collections/SimulationCollection.js',
@@ -28,6 +31,7 @@ module.exports = function (grunt) {
                 'app/js/views/ResultListView.js',
                 'app/js/views/DashboardView.js',
                 'app/js/views/SimulationView.js',
+                'app/js/views/VisualizeView.js',
 
                 'app/js/router.js',
                 'app/js/app.js'

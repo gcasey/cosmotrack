@@ -1,16 +1,19 @@
 ct.views.ResultListView = Backbone.View.extend({
     events: {
-        'click .ct-accordion-header': 'displaySimulation'
+        'click .ct-accordion-header': 'displaySimulation',
+        'click a.ct-viewable-link': 'requestVisualization'
     },
 
     initialize: function () {
+        this.collection = new ct.collections.SimulationCollection();
         this.collection.on('fetched', function () {
             this.render();
         }, this);
+        this.collection.fetch();
     },
 
     render: function () {
-        this.$el.empty().append(jade.templates.result_list({
+        this.$el.html(jade.templates.result_list({
             simulations: this.collection.models
         }));
         this.accordion = $('.ct-result-accordion').accordion({
@@ -18,6 +21,7 @@ ct.views.ResultListView = Backbone.View.extend({
             collapsible: true,
             heightStyle: 'content'
         });
+        return this;
     },
 
     displaySimulation: function (event) {
@@ -33,5 +37,10 @@ ct.views.ResultListView = Backbone.View.extend({
                 model: this.collection.get(simulationId),
             });
         }
+    },
+
+    requestVisualization: function (event) {
+        var viewableId = $(event.target).attr('viewable-id');
+        this.trigger('visualize', viewableId);
     }
 });

@@ -1,11 +1,11 @@
 ct.collections.ViewableCollection = Backbone.Collection.extend({
     model: ct.models.Viewable,
 
-    initialize: function (settings) {
+    fetch: function (opts) {
         ct.restRequest({
             resource: 'viewable',
             data: {
-                simulation_id: settings.simulation.id
+                simulation_id: opts.simulation.id
             }
         }).done(_.bind(function (resources) {
             this.add(resources);

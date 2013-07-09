@@ -9,7 +9,10 @@ var ct = {
     restRequest: function (opts) {
         var defaults = {
             dataType: 'json',
-            type: 'GET'
+            type: 'GET',
+            error: function (event) {
+                console.log('moo', event);
+            }
         };
         opts.url = ct.apiRoot + opts.resource;
 
