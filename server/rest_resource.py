@@ -1,6 +1,9 @@
 import cherrypy
 import json
 
+def ObjectIdConverter(oid):
+    return str(oid)
+
 class RestResource:
     def __init__(self, _conn):
         self.conn = _conn
@@ -26,5 +29,5 @@ class RestResource:
                     return resp
 
             #Default behavior will just be normal JSON output
-            return json.dumps(val)
+            return json.dumps(val, default=ObjectIdConverter)
         return wrapper

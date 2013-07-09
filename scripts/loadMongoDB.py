@@ -41,7 +41,7 @@ if __name__ == "__main__":
             timesteps = info['timesteps']
 
             # Warning this is a big hack that assumes the ordering of these two things are the same
-            info['files'] = zip(timesteps, files)
+            info['files'] = [dict(timestep=t, file=f) for t,f in zip(timesteps, files)]
 
     pprint.pprint(document)
     db.simulations.insert(document)

@@ -6,7 +6,7 @@ class Simulation(RestResource):
 
     def simplify(self, doc):
         analysis = doc['cosmo']['analysistool']
-        analysis = [str(a['_id']) for a in analysis.itervalues()]
+        analysis = [str(a['_id']) for a in analysis]
 
         return {'id': str(doc['_id']),
                 'name': doc['simulation_name'],
