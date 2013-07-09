@@ -1,5 +1,5 @@
-ct.collections.ViewableCollection = Backbone.Collection.extend({
-    model: ct.models.Viewable,
+ct.collections.AnalysisCollection = Backbone.Collection.extend({
+    model: ct.models.Analysis,
 
     fetch: function (opts) {
         ct.restRequest({

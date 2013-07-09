@@ -1,10 +1,10 @@
 ct.views.SimulationView = Backbone.View.extend({
     initialize: function () {
-        this.analysiscollection = new ct.collections.ViewableCollection();
-        this.analysiscollection.on('fetched', function () {
+        this.analyses = new ct.collections.AnalysisCollection();
+        this.analyses.on('fetched', function () {
             this.render();
         }, this);
-        this.analysiscollection.fetch({
+        this.analyses.fetch({
             simulation: this.model
         });
     },
@@ -12,7 +12,7 @@ ct.views.SimulationView = Backbone.View.extend({
     render: function () {
         this.$el.html(jade.templates.simulation({
             simulation: this.model,
-            analysiscollection: this.analysiscollection.models
+            analyses: this.analyses.models
         }));
         return this;
     }

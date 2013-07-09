@@ -8,6 +8,6 @@ div
     |  #{simulation.get('user')}
 
 .ct-analysis-wrapper
-  each analysis in analysiscollection
+  each analysis in analyses
     .ct-analysis-container
       a.ct-analysis-link(analysis-id="#{analysis.id}")= analysis.get('name')

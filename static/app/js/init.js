@@ -10,8 +10,9 @@ var ct = {
         var defaults = {
             dataType: 'json',
             type: 'GET',
-            error: function (event) {
-                console.log('moo', event);
+            error: function (error) {
+                // Default error handler simply logs the error event
+                console.log(error);
             }
         };
         opts.url = ct.apiRoot + opts.resource;
