@@ -33,6 +33,7 @@ module.exports = function (grunt) {
                 'app/js/views/SimulationView.js',
                 'app/js/views/VisualizeView.js',
 
+                'app/js/utilities.js',
                 'app/js/router.js',
                 'app/js/app.js'
             ]

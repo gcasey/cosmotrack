@@ -1,0 +1,10 @@
+
+#ct-modal-dialog.modal.hide.fade
+  .modal-header
+    button.close(data-dismiss="modal", aria-hidden="true", type="button") &times;
+    span.ct-modal-title #{title}
+  .modal-body
+    span #{text}
+  .modal-footer
+    a.btn.ct-dialog-close-button(data-dismiss="modal") #{dismissText}
+    span.ct-extra-modal-buttons

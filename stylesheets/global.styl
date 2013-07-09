@@ -2,11 +2,14 @@
  * Styles that apply globally across the application belong in this file.
  * If a style is specific to a single view, put it elsewhere.
  */
+
+$title-color = #555
+
 body
   padding-top 20px
 
 h2.ct-view-header
-  color #555
+  color $title-color
   margin 0
   font-size 22px
 
@@ -14,8 +17,13 @@ h3.ct-accordion-header
   font-size 13px
 
 .ct-empty-set-message
-  color #777
+  color title-color
   font-style italic
+
+.ct-modal-title
+  font-size 16px
+  color $title-color
+  font-weight bold
 
 a
   cursor pointer

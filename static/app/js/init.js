@@ -11,7 +11,11 @@ var ct = {
             dataType: 'json',
             type: 'GET',
             error: function (error) {
-                // Default error handler simply logs the error event
+                ct.dialog({
+                    title: 'API Error',
+                    text: 'An error occurred while communicating with the server. ' +
+                          'Details have been logged in the console.'
+                });
                 console.log(error);
             }
         };
