@@ -1,7 +1,7 @@
 from rest_resource import RestResource
 from bson.objectid import ObjectId
 
-class Viewable(RestResource):
+class Analysis(RestResource):
     exposed = True
 
     @RestResource.endpoint

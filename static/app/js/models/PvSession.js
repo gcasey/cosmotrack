@@ -1,6 +1,6 @@
 ct.models.PvSession = Backbone.Model.extend({
     id: null,
-    viewable_id: null,
+    analysis_id: null,
     secret: null,
     url: null,
 
@@ -13,7 +13,7 @@ ct.models.PvSession = Backbone.Model.extend({
             resource: 'pvsession',
             type: 'POST',
             data: {
-                viewable_id: this.get('viewable_id')
+                analysis_id: this.get('analysis_id')
             }
         }).done(_.bind(function (attributes) {
             this.set(attributes);

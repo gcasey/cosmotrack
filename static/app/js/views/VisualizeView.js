@@ -7,13 +7,13 @@
             return this;
         },
 
-        visualize: function (viewableId) {
+        visualize: function (analysisId) {
             if (this.pvSession) {
                 // TODO use existing session
             }
             else {
                 this.pvSession = new ct.models.PvSession({
-                    viewable_id: viewableId
+                    analysis_id: analysisId
                 });
                 this.$overlay.show();
                 this.$status.text('Creating new ParaView session...');

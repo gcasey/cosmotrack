@@ -3,7 +3,7 @@ ct.collections.ViewableCollection = Backbone.Collection.extend({
 
     fetch: function (opts) {
         ct.restRequest({
-            resource: 'viewable',
+            resource: 'analysis',
             data: {
                 simulation_id: opts.simulation.id
             }

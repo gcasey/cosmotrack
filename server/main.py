@@ -3,7 +3,7 @@ import pymongo
 import os
 
 from simulation import Simulation
-from viewable import Viewable
+from analysis import Analysis
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     apiv1 = root.api.v1
     apiv1.simulation = Simulation(root.conn)
-    apiv1.viewable = Viewable(root.conn)
+    apiv1.analysis = Analysis(root.conn)
 
     config = {
         '/' : {
