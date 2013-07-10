@@ -1,6 +1,8 @@
 from rest_resource import RestResource
 from bson.objectid import ObjectId
 import subprocess
+import socket
+import time
 
 class PvSession(RestResource):
     exposed = True
@@ -35,8 +37,18 @@ class PvSession(RestResource):
         proc = subprocess.Popen(cmd)
 
         # Check if the process is opened
-        if proc.poll():
-            raise Exception('Failed to launch')
+        # HACK: This is ugly
+        for _ in range(5):
+            time.sleep(.1)
+            try:
+                r = socket.create_connection(('localhost', port), 2)
+            except:
+                pass
+            else:
+                r.close()
+                break
+            if proc.poll():
+                raise Exception('Process failed to launch')
 
         # Setup the proxy session
         self._processes[port] = proc
