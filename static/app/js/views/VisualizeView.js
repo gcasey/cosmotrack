@@ -27,6 +27,7 @@
     });
 
     var connectToSession = function (view, pvSession) {
-        // TODO
+        console.log(view);
+        console.log(pvSession);
     };
 }) ();

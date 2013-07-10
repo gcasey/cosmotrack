@@ -8,6 +8,10 @@ div
     |  #{simulation.get('user')}
 
 .ct-analysis-wrapper
-  each analysis in analyses
-    .ct-analysis-container
-      a.ct-analysis-link(analysis-id="#{analysis.id}")= analysis.get('name')
+  b Analysis Results:
+  ul.ct-analysis-list.nav.nav-stacked.nav-list
+    each analysis in analyses
+      li.ct-analysis-result
+        a.ct-analysis-link(analysis-id="#{analysis.id}")
+          i.icon-chevron-right
+          | #{analysis.get('name')}

@@ -4,6 +4,7 @@ import os
 
 from simulation import Simulation
 from analysis import Analysis
+from pvsession import PvSession
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -29,6 +30,7 @@ if __name__ == '__main__':
     apiv1 = root.api.v1
     apiv1.simulation = Simulation(root.conn)
     apiv1.analysis = Analysis(root.conn)
+    apiv1.pvsession = PvSession(root.conn)
 
     config = {
         '/' : {

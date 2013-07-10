@@ -17,6 +17,7 @@ var ct = {
                           'Details have been logged in the console.'
                 });
                 console.log(error);
+                ct.lastError = error;
             }
         };
         opts.url = ct.apiRoot + opts.resource;

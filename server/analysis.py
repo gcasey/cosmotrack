@@ -20,7 +20,8 @@ class Analysis(RestResource):
                                          'cosmo.analysistool.$' : 1})
         # This gets the whole entry for the simulation
         at = s['cosmo']['analysistool'][0]
-        result = {'files' : at['files'],
+        result = {'id' : analysis_id,
+                  'files' : at['files'],
                   'name' : at['key']}
 
         return result
@@ -28,4 +29,4 @@ class Analysis(RestResource):
     def searchBySimulationId(self, simid):
         s = self.simcollection.find_one({'_id' : ObjectId(simid)})
         analysistools = s['cosmo']['analysistool']
-        return [dict(name=a['key'], analysis_id=str(a['_id'])) for a in analysistools]
+        return [dict(name=a['key'], id=str(a['_id'])) for a in analysistools]

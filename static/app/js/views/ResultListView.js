@@ -1,7 +1,7 @@
 ct.views.ResultListView = Backbone.View.extend({
     events: {
         'click .ct-accordion-header': 'displaySimulation',
-        'click a.ct-analysis-link': 'requestVisualization'
+        'click .ct-analysis-link': 'requestVisualization'
     },
 
     initialize: function () {
@@ -40,7 +40,11 @@ ct.views.ResultListView = Backbone.View.extend({
     },
 
     requestVisualization: function (event) {
-        var analysisId = $(event.target).attr('analysis-id');
+        var link = $(event.currentTarget);
+        var analysisId = link.attr('analysis-id');
+        $('li.ct-analysis-result').removeClass('active');
+        link.parent().addClass('active');
+
         this.trigger('visualize', analysisId);
     }
 });
