@@ -38,17 +38,21 @@ class PvSession(RestResource):
 
         # Check if the process is opened
         # HACK: This is ugly
+        success = False
         for _ in range(5):
-            time.sleep(.1)
+            time.sleep(1)
             try:
                 r = socket.create_connection(('localhost', port), 2)
             except:
                 pass
             else:
                 r.close()
+                success = True
                 break
             if proc.poll():
                 raise Exception('Process failed to launch')
+        if not success:
+            raise Exception('Could not launch process')
 
         # Setup the proxy session
         self._processes[port] = proc
