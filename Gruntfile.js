@@ -16,6 +16,7 @@ module.exports = function (grunt) {
                 'lib/js/underscore-min.js',
                 'lib/js/autobahn.min.js',
                 'lib/js/paraview-all.min.js',
+                'lib/js/hammer.min.js',
                 'node/jade/runtime.js',
                 'node/backbone/backbone-min.js',
 
