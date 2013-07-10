@@ -11,6 +11,7 @@ class PvSession(RestResource):
         # TODO Make configurable
         self._availableports = set(range(9001,9100))
         self._processes = {}
+        self.sessiondb = self.conn.cosmodata.pvsession
 
     @RestResource.endpoint
     def POST(self, **params):
@@ -25,17 +26,27 @@ class PvSession(RestResource):
             # TODO: Make this more http-like
             raise e
 
-        proc = subprocess.Popen(['/home/casey.goodlett/projects/sciviz/PV-bin/bin/pvpython',
-                                 '/home/casey.goodlett/projects/sciviz/ParaView/Web/Python/simple_server.py',
-                                 '--port',
-                                 str(port)])
+        cmd = ['/Users/caseygoodlett/common/PV-bin/bin/pvpython',
+               '/Users/caseygoodlett/common/ParaView/Web/Python/simple_server.py',
+               '--port',
+               str(port)]
+        print ' '.join(cmd)
+
+        proc = subprocess.Popen(cmd)
+
+        # Check if the process is opened
         if proc.poll():
             raise Exception('Failed to launch')
 
         # Setup the proxy session
         self._processes[port] = proc
 
+        pvsession_id = self.sessiondb.insert({'port': port,
+                                              'status': 'alive',
+                                              'pid' : proc.pid
+                                          })
+                               
         return {
-            'analysis_id' : analysisId,
+            'id' : str(pvsession_id),
             'url' : 'ws://localhost:%d/ws' % port
         }
