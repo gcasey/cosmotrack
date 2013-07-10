@@ -3,15 +3,21 @@
  * If a style is specific to a single view, put it elsewhere.
  */
 
-$title-color = #555
+border-radius()
+  -webkit-border-radius arguments
+  -moz-border-radius arguments
+  border-radius arguments
+
+$titleColor = #555
 
 body
   padding-top 20px
 
 h2.ct-view-header
-  color $title-color
+  color $titleColor
   margin 0
   font-size 22px
+  line-height 1.4
 
 h3.ct-accordion-header
   font-size 13px
@@ -22,8 +28,49 @@ h3.ct-accordion-header
 
 .ct-modal-title
   font-size 16px
-  color $title-color
+  color $titleColor
   font-weight bold
 
 a
   cursor pointer
+
+/*
+ * Widget customization: ct-action-list-widget
+ */
+$listBorderRadius = 4px
+
+ul.ct-action-list-widget
+  margin-top 10px
+  padding 0
+  box-shadow 0 1px 4px 0 rgba(0,0,0,0.1)
+  border-radius $listBorderRadius
+
+ul.ct-action-list-widget > li > a > .icon-chevron-right
+  float right
+  margin-top 2px
+  margin-right -6px
+  opacity .4
+
+ul.ct-action-list-widget > li:hover > a > .icon-chevron-right
+  opacity .7
+
+ul.ct-action-list-widget > li.active > a > .icon-chevron-right
+  opacity 1
+
+ul.ct-action-list-widget > li > a
+  display block
+  margin 0 0 -1px
+  padding 6px 12px
+  border 1px solid #e5e5e5
+
+ul.ct-action-list-widget > li:first-child > a
+  border-radius $listBorderRadius $listBorderRadius 0 0
+
+ul.ct-action-list-widget > li:last-child > a
+  border-radius 0 0 $listBorderRadius $listBorderRadius
+
+ul.ct-action-list-widget > .active > a
+  position relative
+  z-index 2
+  padding 7px 13px
+  border 0
