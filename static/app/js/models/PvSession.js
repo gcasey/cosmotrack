@@ -3,6 +3,7 @@ ct.models.PvSession = Backbone.Model.extend({
     analysis_id: null,
     secret: null,
     url: null,
+    authKey: null,
 
     /**
      * Request that the server create a new paraview web instance.

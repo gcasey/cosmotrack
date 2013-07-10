@@ -26,8 +26,27 @@
         }
     });
 
+    /**
+     * Private helper function to connect to PVW session that has started
+     */
     var connectToSession = function (view, pvSession) {
-        console.log(view);
-        console.log(pvSession);
+        view.pvConfig = {
+            sessionURL: pvSession.get('url'),
+            id: pvSession.id,
+            sessionManagerURL: ct.apiRoot + 'pvsession',
+            //secret: pvSession.get('authKey'),
+            interactiveQuality: 50
+        };
+        paraview.connect(view.pvConfig, function(conn) {
+            view.pvConnection = conn;
+            view.viewport = paraview.createViewport(conn);
+            view.viewport.bind('#ct-render-container');
+
+            view.$overlay.hide();
+        }, function(code, msg) {
+            view.$status.text('Connection failed.');
+            view.$('img.ct-pvw-loading').hide();
+            view.trigger('pverror', code, msg);
+        });
     };
 }) ();
