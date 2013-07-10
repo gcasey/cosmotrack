@@ -1,0 +1,37 @@
+$listBorderRadius = 4px
+
+border-radius()
+  -webkit-border-radius arguments
+  -moz-border-radius arguments
+  border-radius arguments
+
+div.ct-analysis-wrapper
+  margin-top 10px
+
+ul.ct-analysis-list
+  margin-top 10px
+  padding 0
+
+ul.ct-analysis-list > li > a > .icon-chevron-right
+  float right
+  margin-top 2px
+  margin-right -6px
+  opacity .4
+
+ul.ct-analysis-list > li > a
+  display block
+  margin 0 0 -1px
+  padding 6px 12px
+  border 1px solid #e5e5e5
+
+ul.ct-analysis-list > li:first-child > a
+  border-radius $listBorderRadius $listBorderRadius 0 0
+
+ul.ct-analysis-list > li:last-child > a
+  border-radius 0 0 $listBorderRadius $listBorderRadius
+
+ul.ct-analysis-list > .active > a
+  position relative
+  z-index 2
+  padding 7px 13px
+  border 0
