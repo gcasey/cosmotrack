@@ -7,8 +7,8 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         config: {
-            // The order of this list represents the order of script imports and execution
-            srcList: [
+            // The order of these lists represents the order of script imports and execution
+            libSrcList: [
                 // Third-party libraries
                 'lib/js/jquery-1.10.1.min.js',
                 'lib/js/jquery-ui.min.js',
@@ -18,9 +18,10 @@ module.exports = function (grunt) {
                 'lib/js/paraview-all.min.js',
                 'lib/js/hammer.min.js',
                 'node/jade/runtime.js',
-                'node/backbone/backbone-min.js',
-
-                // Application imports
+                'node/backbone/backbone-min.js'
+            ],
+            appSrcList: [
+                // Application files
                 'app/js/built/templates.js',
                 'app/js/init.js',
 
@@ -67,16 +68,31 @@ module.exports = function (grunt) {
     // Put all of our js into one file
     grunt.registerTask('build-js', 'Compile the JS into a single file', function () {
         var config = grunt.config.get('config');
-        var compiledFile = 'static/app/js/built/cosmotrack.js';
-        if (fs.existsSync(compiledFile)) {
-            fs.unlinkSync(compiledFile);
+        var compiledLibs = 'static/app/js/built/libs.js',
+            compiledApp  = 'static/app/js/built/cosmotrack.js';
+
+        if (fs.existsSync(compiledLibs)) {
+            fs.unlinkSync(compiledLibs);
+        }
+        if (fs.existsSync(compiledApp)) {
+            fs.unlinkSync(compiledApp);
         }
 
-        config.srcList.forEach(function (srcFile) {
+        console.log('Building libs.js');
+        config.libSrcList.forEach(function (srcFile) {
             console.log('Appending ' + srcFile)
             var content = fs.readFileSync('static/' + srcFile);
-            fs.appendFileSync(compiledFile, content + '\n;\n');
+            fs.appendFileSync(compiledLibs, content + '\n;\n');
         });
+
+        console.log('Building cosmotrack.js');
+        config.appSrcList.forEach(function (srcFile) {
+            console.log('Appending ' + srcFile)
+            var content = fs.readFileSync('static/' + srcFile);
+            fs.appendFileSync(compiledApp, content + '\n\n');
+        });
+
+
     });
 
     // Compile the jade templates into a single js file

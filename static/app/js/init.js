@@ -10,13 +10,17 @@ var ct = {
         var defaults = {
             dataType: 'json',
             type: 'GET',
+
+            /* To prevent this default behavior, pass in a opts object with an 'error'
+               key. If you want a custom handler *in addition* to this behavior, add a
+               ".error(...)" chained call on the returned object. */
             error: function (error) {
                 ct.dialog({
                     title: 'API Error',
                     text: 'An error occurred while communicating with the server. ' +
                           'Details have been logged in the console.'
                 });
-                console.log(error);
+                console.log(error.status + ' ' + error.statusText, error.responseText);
                 ct.lastError = error;
             }
         };
