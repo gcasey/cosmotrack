@@ -3,6 +3,7 @@ from bson.objectid import ObjectId
 import subprocess
 import socket
 import time
+import cherrypy
 
 class PvSession(RestResource):
     exposed = True
@@ -10,14 +11,36 @@ class PvSession(RestResource):
     def __init__(self, *args, **kwargs):
         RestResource.__init__(self, *args, **kwargs)
 
-        # TODO Make configurable
-        self._availableports = set(range(9001,9100))
-        self._processes = {}
         self.sessiondb = self.conn.cosmodata.pvsession
+        self._processes = {}
+        self._availableports = set(range(9000,9100))
 
     @RestResource.endpoint
     def POST(self, **params):
         return self.spawnInstance(params['analysis_id'])
+
+    def _checkProcessIsListeningOnPort(self, proc, port):
+        RETRY_COUNT = 10
+        SLEEP_TIME = 0.5
+        TIMEOUT = 1.0
+
+        success = False
+        for i in range(RETRY_COUNT):
+            time.sleep(SLEEP_TIME*i)
+            cherrypy.request.app.log('Try %d to connect' % i)
+            if proc.poll():
+                raise Exception('Process failed to launch')
+
+            try:
+                r = socket.create_connection(('localhost', port), 1.0)
+            except IOError:
+                continue
+            else:
+                r.close()
+                success = True
+                break
+
+        return success
 
     def spawnInstance(self, analysisId):
         # TODO: A first bad implementation will scan for dead processes
@@ -28,31 +51,16 @@ class PvSession(RestResource):
             # TODO: Make this more http-like
             raise e
 
-        cmd = ['/Users/caseygoodlett/common/PV-bin/bin/pvpython',
-               '/Users/caseygoodlett/common/ParaView/Web/Python/simple_server.py',
+        cmd = ['/home/casey.goodlett/projects/sciviz/PV-bin/bin/pvpython',
+               '/home/casey.goodlett/projects/sciviz/cosmotrack/pvapp/cosmo_viewer.py',
                '--port',
                str(port)]
         print ' '.join(cmd)
 
         proc = subprocess.Popen(cmd)
 
-        # Check if the process is opened
-        # HACK: This is ugly
-        success = False
-        for _ in range(5):
-            time.sleep(1)
-            try:
-                r = socket.create_connection(('localhost', port), 2)
-            except:
-                pass
-            else:
-                r.close()
-                success = True
-                break
-            if proc.poll():
-                raise Exception('Process failed to launch')
-        if not success:
-            raise Exception('Could not launch process')
+        if not self._checkProcessIsListeningOnPort(proc, port):
+            raise Exception('Failed to connect to pvapp')
 
         # Setup the proxy session
         self._processes[port] = proc
@@ -60,8 +68,8 @@ class PvSession(RestResource):
         pvsession_id = self.sessiondb.insert({'port': port,
                                               'status': 'alive',
                                               'pid' : proc.pid
-                                          })
-                               
+                                              })
+
         return {
             'id' : str(pvsession_id),
             'url' : 'ws://localhost:%d/ws' % port
