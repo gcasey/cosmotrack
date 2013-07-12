@@ -21,7 +21,7 @@ class Analysis(RestResource):
         # This gets the whole entry for the simulation
         at = s['cosmo']['analysistool'][0]
         result = {'id' : analysis_id,
-                  'files' : at['files'],
+                  'loadDataArgs' : [at['files'][0]],
                   'name' : at['key']}
 
         return result

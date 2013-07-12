@@ -1,6 +1,7 @@
 import cherrypy
 import pymongo
 import os
+import sys
 
 from simulation import Simulation
 from analysis import Analysis
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     apiv1.analysis = Analysis(root.conn)
     apiv1.pvsession = PvSession(root.conn)
 
-    config = {
+    appconf = {
         '/' : {
             'request.dispatch' : cherrypy.dispatch.MethodDispatcher(),
             'tools.staticdir.root' : ROOT_DIR
@@ -43,7 +44,13 @@ if __name__ == '__main__':
             }
         }
 
-    cherrypy.tree.mount(root, '/', config)
+    cherrypy.config.update(sys.argv[1])
+    cherrypy.config.update(appconf)
+    print cherrypy.config
+
+    app = cherrypy.tree.mount(root, '/', appconf)
+    app.merge(sys.argv[1])
+    print app.config
 
     cherrypy.engine.start()
     cherrypy.engine.block()

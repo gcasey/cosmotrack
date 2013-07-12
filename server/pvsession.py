@@ -51,8 +51,12 @@ class PvSession(RestResource):
             # TODO: Make this more http-like
             raise e
 
-        cmd = ['/home/casey.goodlett/projects/sciviz/PV-bin/bin/pvpython',
-               '/home/casey.goodlett/projects/sciviz/cosmotrack/pvapp/cosmo_viewer.py',
+        paraviewconfig = cherrypy.config['ParaView']
+        pvexecutable = paraviewconfig['pvpython']
+        script = paraviewconfig['script']
+
+        cmd = [pvexecutable,
+               script,
                '--port',
                str(port)]
         print ' '.join(cmd)
