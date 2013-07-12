@@ -59,21 +59,17 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
         #self.updateSecret(authKey)
 
     @exportRpc("loadData")
-    def openFile(self, filename):
-        fileid = ""
-        if self.reader:
-            try:
-                simple.Delete(self.reader)
-            except:
-                self.reader = None
+    def loadData(self, filename):
         try:
-            self.reader = simple.OpenDataFile(filename)
-            simple.Show()
-            simple.Render()
-            simple.ResetCamera()
-            fileid = self.reader.GetGlobalIDAsString()
+            simple.Delete()
         except:
-            self.reader = None
+            pass
+        reader = simple.OpenDataFile(filename)
+        simple.Show()
+        simple.Render()
+        simple.ResetCamera()
+        fileid = reader.GetGlobalIDAsString()
+
         return fileid
 
 if __name__ == "__main__":

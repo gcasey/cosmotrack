@@ -60,15 +60,6 @@ class PvSession(RestResource):
                '--port',
                str(port)]
 
-        # Temporary
-        s = self.simcollection.find_one({'cosmo.analysistool._id': ObjectId(analysisId)},
-                                        {'_id' : 0,
-                                         'cosmo.analysistool.$' : 1})
-        # Just get the last file
-        print s
-        dataFile = s['cosmo']['analysistool'][0]['files'][-1]['file']
-        cmd += ['--file', dataFile]
-
         cherrypy.request.app.log('Running script %s' % ' '.join(cmd))
         proc = subprocess.Popen(cmd)
 

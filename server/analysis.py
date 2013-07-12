@@ -21,7 +21,7 @@ class Analysis(RestResource):
         # This gets the whole entry for the simulation
         at = s['cosmo']['analysistool'][0]
         result = {'id' : analysis_id,
-                  'loadDataArgs' : [at['files'][0]],
+                  'loadDataArgs' : [at['files'][-1]['file']],
                   'name' : at['key']}
 
         return result
@@ -29,4 +29,12 @@ class Analysis(RestResource):
     def searchBySimulationId(self, simid):
         s = self.simcollection.find_one({'_id' : ObjectId(simid)})
         analysistools = s['cosmo']['analysistool']
-        return [dict(name=a['key'], id=str(a['_id'])) for a in analysistools]
+
+        def genEntry(a):
+            try:
+                files = [a['files'][-1]['file']]
+            except KeyError:
+                files = []
+            return dict(name=a['key'], id=str(a['_id']), loadDataArgs=files)
+
+        return [genEntry(a) for a in analysistools]

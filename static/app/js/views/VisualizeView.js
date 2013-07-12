@@ -68,9 +68,14 @@
      * @param {VisualizeView} view The view object
      */
     var loadAnalysis = function (view) {
-        var args = view.analysis.loadDataArgs;
-        view.pvConnection.session.call('pv:loadData', args, function () {
-            view.viewport.render();
-        });
+        var args = view.analysis.get('loadDataArgs');
+        view.pvConnection.session.call('pv:loadData', args)
+            .then(function () {
+                view.viewport.render();
+                })
+            .otherwise(function (err) {
+                console.log('RPC Failure');
+                console.log(err);
+            });
     };
 }) ();
