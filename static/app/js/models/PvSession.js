@@ -19,6 +19,8 @@ ct.models.PvSession = Backbone.Model.extend({
         }).done(_.bind(function (attributes) {
             this.set(attributes);
             this.trigger('created');
+        }, this)).error(_.bind(function () {
+            this.trigger('error');
         }, this));
     }
 });

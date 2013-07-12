@@ -10,8 +10,8 @@ ct.views.DashboardView = Backbone.View.extend({
             el: '#ct-visualize-well'
         }).render();
 
-        this.resultListView.on('visualize', function (analysisId) {
-            this.visualizeView.visualize(analysisId);
+        this.resultListView.on('visualize', function (analysis) {
+            this.visualizeView.visualize(analysis);
         }, this);
 
         return this;
