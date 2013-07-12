@@ -34,7 +34,6 @@ from paraview import simple, web, servermanager, web_helper, paraviewweb_wamp, p
 timesteps = []
 currentTimeIndex = 0
 view = None
-dataPath = None
 authKey = None
 
 def initView(width, height):
@@ -59,7 +58,7 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
         # Update authentication key to use
         #self.updateSecret(authKey)
 
-    @exportRpc("openFile")
+    @exportRpc("loadData")
     def openFile(self, filename):
         fileid = ""
         if self.reader:
@@ -81,15 +80,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Midas+ParaViewWeb application")
     web.add_arguments(parser)
-    parser.add_argument("--data-dir", default=os.getcwd(),
-        help="path to data directory", dest="path")
     parser.add_argument("--width", default=575,
         help="width of the render window", dest="width")
     parser.add_argument("--height", default=575,
         help="height of the render window", dest="height")
     args = parser.parse_args()
 
-    dataPath = args.path
     authKey = args.authKey
     width = args.width
     height = args.height
