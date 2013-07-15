@@ -64,9 +64,20 @@ module.exports = function (grunt) {
         },
 
         watch: {
+            css: {
+                files: 'stylesheets/*.styl',
+                tasks: ['build-css'],
+                options: {failOnError: false}
+            },
+            js: {
+                files: ['static/app/js/**/*.js',
+                        '!static/app/js/built/*.js'],
+                tasks: ['concat-js', 'uglify'],
+                options: {failOnError: false}
+            },
             jade: {
-                files: 'templates/*.jade',
-                tasks: ['build'],
+                files: ['templates/*.jade'],
+                tasks: ['build-js'],
                 options: {failOnError: false}
             }
         }
@@ -78,7 +89,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Put all of our js into one file
-    grunt.registerTask('build-js', 'Compile the JS into a single file', function () {
+    grunt.registerTask('concat-js', 'Compile the JS into a single file', function () {
         var config = grunt.config.get('config');
         var compiledLibs = 'static/app/js/built/libs.js',
             compiledApp  = 'static/app/js/built/cosmotrack.js';
@@ -145,6 +156,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('build', ['jade', 'stylus', 'build-js', 'uglify']);
-    grunt.registerTask('default', ['init', 'build']);
+    grunt.registerTask('build-css', ['stylus'])
+    grunt.registerTask('build-js', ['jade', 'concat-js', 'uglify']);
+    grunt.registerTask('default', ['init', 'build-css', 'build-js']);
 };
