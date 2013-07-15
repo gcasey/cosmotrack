@@ -4,6 +4,8 @@ import subprocess
 import socket
 import time
 import cherrypy
+import random
+import string
 
 class PvSession(RestResource):
     exposed = True
@@ -55,10 +57,16 @@ class PvSession(RestResource):
         pvexecutable = paraviewconfig['pvpython']
         script = paraviewconfig['script']
 
+        secret = ''.join(random.choice(\
+            string.ascii_uppercase + string.digits + string.ascii_lowercase)\
+            for x in range(32))
+
         cmd = [pvexecutable,
                script,
                '--port',
-               str(port)]
+               str(port),
+               '--authKey',
+               secret]
 
         cherrypy.request.app.log('Running script %s' % ' '.join(cmd))
         proc = subprocess.Popen(cmd)
@@ -71,10 +79,12 @@ class PvSession(RestResource):
 
         pvsession_id = self.sessiondb.insert({'port': port,
                                               'status': 'alive',
-                                              'pid' : proc.pid
+                                              'pid' : proc.pid,
+                                              'secret' : secret
                                               })
 
         return {
             'id' : str(pvsession_id),
-            'url' : 'ws://localhost:%d/ws' % port
+            'url' : 'ws://localhost:%d/ws' % port,
+            'secret' : secret
         }

@@ -56,7 +56,7 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
         self.registerParaViewWebProtocol(paraviewweb_protocols.ParaViewWebViewPortGeometryDelivery())
 
         # Update authentication key to use
-        #self.updateSecret(authKey)
+        self.updateSecret(authKey)
 
     @exportRpc("loadData")
     def loadData(self, filename):
@@ -76,9 +76,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Midas+ParaViewWeb application")
     web.add_arguments(parser)
-    parser.add_argument("--width", default=575,
+    parser.add_argument("--width", default=400,
         help="width of the render window", dest="width")
-    parser.add_argument("--height", default=575,
+    parser.add_argument("--height", default=400,
         help="height of the render window", dest="height")
     args = parser.parse_args()
 

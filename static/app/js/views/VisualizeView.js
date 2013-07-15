@@ -13,9 +13,6 @@
 
             if (this.pvConnection) {
                 // Reuse the already connected session
-                this.$overlay.show();
-                this.$loading.show();
-                this.$status.text('Loading analysis data...');
                 loadAnalysis(this);
             }
             else {
@@ -23,17 +20,30 @@
                 this.pvSession = new ct.models.PvSession({
                     analysis_id: analysis.id
                 });
-                this.$overlay.show();
-                this.$status.text('Creating new ParaView session...');
+                this.showStatus('Creating new ParaView session...', true);
                 this.pvSession.on('created', function () {
-                    this.$status.text('Connecting to session...');
+                    this.showStatus('Connecting to session...', true);
                     connectToSession(this);
                 }, this).on('error', function () {
-                    this.$loading.hide();
-                    this.$status.text('Create session failed.');
+                    this.showStatus('Create session failed.');
                 }, this).create();
             }
             return this;
+        },
+
+        showStatus: function (message, loading) {
+            this.$overlay.show();
+            this.$status.text(message);
+            if (loading) {
+                this.$loading.show();
+            }
+            else {
+                this.$loading.hide();
+            }
+        },
+
+        hideStatus: function () {
+            this.$overlay.hide();
         }
     });
 
@@ -46,20 +56,19 @@
             sessionURL: view.pvSession.get('url'),
             id: view.pvSession.id,
             sessionManagerURL: ct.apiRoot + 'pvsession',
-            //secret: view.pvSession.get('authKey'),
-            interactiveQuality: 50
+            secret: view.pvSession.get('secret'),
+            interactiveQuality: 60
         };
+
         paraview.connect(view.pvConfig, function(conn) {
             view.pvConnection = conn;
             view.viewport = paraview.createViewport(conn);
             view.viewport.bind('#ct-render-container');
-            loadAnalysis(view);
 
-            view.$overlay.hide();
+            loadAnalysis(view);
         }, function(code, msg) {
-            view.$status.text('Connection failed.');
-            view.$loading.hide();
-            view.trigger('pverror', code, msg);
+            view.showStatus('Connection closed.');
+            view.trigger('pvclosed', code, msg);
         });
     };
 
@@ -69,14 +78,15 @@
      */
     var loadAnalysis = function (view) {
         var args = view.analysis.get('loadDataArgs');
+
+        view.showStatus('Loading analysis data...', true);
+
         view.pvConnection.session.call('pv:loadData', args)
             .then(function () {
-                view.$overlay.hide();
                 view.viewport.render();
-                })
-            .otherwise(function (err) {
-                view.$status.text('Failed to load data');
-                console.log('RPC Failure');
+                view.hideStatus();
+            }).otherwise(function (err) {
+                view.showStatus('Failed to load data');
                 console.log(err);
             });
     };
