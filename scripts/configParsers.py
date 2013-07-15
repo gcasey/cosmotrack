@@ -36,7 +36,7 @@ ANALYSIS_TEMPLATES = {
         'merger_tree_file' : None
         }
     }
-          
+
 
 class IncompleteConfigurationException(Exception):
     pass
@@ -65,7 +65,7 @@ def yesNoBool(token):
         return True
     elif token.lower() in ['no', 'false', 'off', 'disabled']:
         return True
-    
+
     raise ValueError("No conversion to bool")
 
 def guessType(token):
@@ -125,7 +125,7 @@ def parseCosmoConfig(fileobj):
 
 def parseIndatParams(fileobj):
     result = {}
-    
+
     for line in fileobj:
         if len(line) < 1 or line[0] == '#':
             continue
@@ -135,9 +135,9 @@ def parseIndatParams(fileobj):
                 continue
             key = convertKeyName(tokens[0])
             result[key] = simplifyChunk([tokens[1]])
-    
+
     return result
-        
+
 def main(simname, cosmofile, indatfile):
     simname = simname
     cosmoParams = parseCosmoConfig(open(cosmofile, 'r'))
@@ -146,9 +146,9 @@ def main(simname, cosmofile, indatfile):
     result = {'simulation_name' : simname,
               'cosmo' : cosmoParams,
               'indat' : indatParams}
-    
+
     return result
-        
+
 if __name__ == '__main__':
     import sys
     _r = main(sys.argv[1], sys.argv[2], sys.argv[3])
