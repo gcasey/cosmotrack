@@ -1,11 +1,14 @@
+import cherrypy
+import os
+import random
+import signal
+import socket
+import string
+import subprocess
+import time
+
 from rest_resource import RestResource
 from bson.objectid import ObjectId
-import subprocess
-import socket
-import time
-import cherrypy
-import random
-import string
 
 class PvSession(RestResource):
     exposed = True
@@ -13,13 +16,38 @@ class PvSession(RestResource):
     def __init__(self, *args, **kwargs):
         RestResource.__init__(self, *args, **kwargs)
 
-        self.sessiondb = self.conn.cosmodata.pvsession
+        self.pvsession = self.conn.cosmodata.pvsession
         self._processes = {}
         self._availableports = set(range(9000,9100))
 
     @RestResource.endpoint
     def POST(self, **params):
         return self.spawnInstance(params['analysis_id'])
+
+    @RestResource.endpoint
+    def DELETE(self, pvsession_id):
+        return self.clearInstance(pvsession_id)
+
+    def clearInstance(self, analysisId):
+        # Get the metadata on the session
+        result = self.pvsession.find_one({'_id' : ObjectId(analysisId)})
+        port = result['port']
+
+        # TODO We might to need to encapsulate this in a critical section
+        try:
+            proc = self._processes[analysisId]
+            proc.kill() # TODO: Should we use terminate?
+            del self._processes[analysisId]
+
+        except KeyError:
+            pid = result['pid']
+
+            # TODO: This is probably pretty darn dangerous
+            os.kill(pid, signal.SIGKILL)
+
+        # Put the port back in
+        self._availableports.add(port)
+
 
     def _checkProcessIsListeningOnPort(self, proc, port):
         RETRY_COUNT = 10
@@ -75,13 +103,13 @@ class PvSession(RestResource):
             raise Exception('Failed to connect to pvapp')
 
         # Setup the proxy session
-        self._processes[port] = proc
-
-        pvsession_id = self.sessiondb.insert({'port': port,
+        pvsession_id = self.pvsession.insert({'port': port,
                                               'status': 'alive',
                                               'pid' : proc.pid,
                                               'secret' : secret
                                               })
+
+        self._processes[pvsession_id] = proc
 
         return {
             'id' : str(pvsession_id),
