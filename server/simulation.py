@@ -12,6 +12,7 @@ class Simulation(RestResource):
                 'name': doc['simulation_name'],
                 'site': doc['source']['site'],
                 'user': doc['source']['user'],
+                'params' : doc['indat'],
                 'analysis_ids' : analysis}
 
     @RestResource.endpoint
