@@ -71,9 +71,11 @@
         var args = view.analysis.get('loadDataArgs');
         view.pvConnection.session.call('pv:loadData', args)
             .then(function () {
+                view.$overlay.hide();
                 view.viewport.render();
                 })
             .otherwise(function (err) {
+                view.$status.text('Failed to load data');
                 console.log('RPC Failure');
                 console.log(err);
             });
