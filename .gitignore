@@ -35,3 +35,6 @@ node_modules
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Local config files
+*.local.cfg

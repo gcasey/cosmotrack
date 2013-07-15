@@ -49,14 +49,24 @@ module.exports = function (grunt) {
 
         stylus: {
             compile: {
-                files: {'static/app/css/built/cosmotrack.css': ['stylesheets/*.styl']}
+                files: {
+                    'static/app/css/built/cosmotrack.css': ['stylesheets/*.styl']
+                }
+            }
+        },
+
+        uglify: {
+            cosmotrack: {
+                files: {
+                    'static/app/js/built/cosmotrack.min.js': ['static/app/js/built/cosmotrack.js']
+                }
             }
         },
 
         watch: {
             jade: {
                 files: 'templates/*.jade',
-                tasks: ['jade'],
+                tasks: ['build'],
                 options: {failOnError: false}
             }
         }
@@ -65,6 +75,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-stylus');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
     // Put all of our js into one file
     grunt.registerTask('build-js', 'Compile the JS into a single file', function () {
@@ -123,13 +134,17 @@ module.exports = function (grunt) {
         console.log('Wrote ' + inputFiles.length + ' templates into ' + outputFile);
     });
 
-    // Task to create symlink to node_modules in static if it doesn't exist already
-    grunt.registerTask('symlink-packages', 'Add symlink for node modules', function () {
+    grunt.registerTask('init', 'One-time tasks', function () {
         if (!fs.existsSync('static/node')) {
-            console.log('Symlink node_modules directory');
+            console.log('Symlinking node_modules directory');
             fs.symlinkSync('../node_modules', 'static/node', 'dir');
+        }
+        if (!fs.existsSync('server/paraview.local.cfg')) {
+            console.log('Creating local config file');
+            fs.writeFileSync('server/paraview.local.cfg', fs.readFileSync('server/paraview.cfg'));
         }
     });
 
-    grunt.registerTask('default', ['symlink-packages', 'jade', 'stylus', 'build-js']);
+    grunt.registerTask('build', ['jade', 'stylus', 'build-js', 'uglify']);
+    grunt.registerTask('default', ['init', 'build']);
 };
