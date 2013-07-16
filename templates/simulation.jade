@@ -7,11 +7,13 @@ div
     b User:
     |  #{simulation.get('user')}
 
-.ct-analysis-wrapper
-  b Analysis Results:
-  ul.ct-analysis-list.ct-action-list-widget.nav.nav-stacked.nav-list
-    each analysis in analyses
-      li.ct-analysis-result
-        a.ct-analysis-link(analysis-id="#{analysis.id}")
-          i.icon-chevron-right
-          | #{analysis.get('name')}
+.ct-simulation-tabs
+  ul.nav.nav-tabs
+    li.active
+      a(href="#ct-tab-analysis-#{simulation.id}", data-toggle="tab") Analysis
+    li
+      a(href="#ct-tab-params-#{simulation.id}", data-toggle="tab") Metadata
+
+.ct-simulation-tab-content.tab-content
+  .ct-analysis-wrapper.tab-pane.active(id="ct-tab-analysis-#{simulation.id}")
+  .ct-params-wrapper.tab-pane(id="ct-tab-params-#{simulation.id}")

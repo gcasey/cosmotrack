@@ -1,0 +1,14 @@
+.ct-metadata-wrapper
+  .ct-metadata-header
+    .row-fluid
+      .ct-table-cell.span6
+        span Name
+      .ct-table-cell.span6
+        span Value
+  .ct-metadata-body
+    each value, key in params
+      .row-fluid
+        .ct-table-cell.span6
+          span #{key}
+        .ct-table-cell.span6
+          span #{value}
