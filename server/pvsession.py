@@ -22,7 +22,7 @@ class PvSession(RestResource):
 
     @RestResource.endpoint
     def POST(self, **params):
-        return self.spawnInstance(params['analysis_id'])
+        return self.spawnInstance()
 
     @RestResource.endpoint
     def DELETE(self, pvsession_id):
@@ -72,7 +72,7 @@ class PvSession(RestResource):
 
         return success
 
-    def spawnInstance(self, analysisId):
+    def spawnInstance(self):
         # TODO: A first bad implementation will scan for dead processes
 
         try:

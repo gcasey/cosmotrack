@@ -65,6 +65,7 @@
             view.viewport = paraview.createViewport(conn);
             view.viewport.bind('#ct-render-container');
 
+            bindStop(view.pvConfig);
             loadAnalysis(view);
         }, function(code, msg) {
             view.showStatus('Connection closed.');
@@ -89,5 +90,20 @@
                 view.showStatus('Failed to load data');
                 console.log(err);
             });
+    };
+
+    /**
+     * Binds stopping the connection to the window unloading.
+     * @param conf The ParaViewWeb configuration object
+     */
+    var bindStop = function (conf) {
+        $(window).bind('beforeunload', function () {
+            // We have to call this synchronously for it to work here.
+            $.ajax({
+                url: ct.apiRoot + '/pvsession/' + conf.id,
+                async: false,
+                type: 'DELETE'
+            });
+        });
     };
 }) ();

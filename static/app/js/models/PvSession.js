@@ -11,10 +11,7 @@ ct.models.PvSession = Backbone.Model.extend({
     create: function () {
         ct.restRequest({
             resource: 'pvsession',
-            type: 'POST',
-            data: {
-                analysis_id: this.get('analysis_id')
-            }
+            type: 'POST'
         }).done(_.bind(function (attributes) {
             this.set(attributes);
             this.trigger('created');
