@@ -49,11 +49,13 @@ if __name__ == "__main__":
         entry = entry.copy()
 
         key = entry['key']
+        oid = entry['_id']
         del entry['key']
+        del entry['_id']
 
         ziplist = [{'key': k, 'value': v} for k,v in entry.iteritems()]
 
-        return {'key' : key, 'value' : ziplist}
+        return {'key' : key, 'value' : ziplist, '_id' : oid}
 
     document['cosmo']['analysistool'] = [convertAnalysisEntry(at) for at in document['cosmo']['analysistool']]
 
