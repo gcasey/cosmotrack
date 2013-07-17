@@ -20,7 +20,9 @@ if __name__ == "__main__":
     document = configParsers.main(sys.argv[1], sys.argv[2], sys.argv[3])
     document = configProcessors.process_timesteps(document)
     document = configProcessors.idify_analysis(document)
+
     document = configProcessors.flattenAssociativeArray(document, 'cosmo', 'analysistool')
+    document = configProcessors.keyValueListFromAssociativeArray(document, 'indat')
 
     # HACK in extra data that we might need
     document['source'] = {'site' : 'localhost',
@@ -42,6 +44,18 @@ if __name__ == "__main__":
 
             # Warning this is a big hack that assumes the ordering of these two things are the same
             info['files'] = [dict(timestep=t, file=f) for t,f in zip(timesteps, files)]
+
+    def convertAnalysisEntry(entry):
+        entry = entry.copy()
+
+        key = entry['key']
+        del entry['key']
+
+        ziplist = [{'key': k, 'value': v} for k,v in entry.iteritems()]
+
+        return {'key' : key, 'value' : ziplist}
+
+    document['cosmo']['analysistool'] = [convertAnalysisEntry(at) for at in document['cosmo']['analysistool']]
 
     pprint.pprint(document)
     db.simulations.insert(document)

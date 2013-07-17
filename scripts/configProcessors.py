@@ -19,6 +19,19 @@
 import collections
 import bson
 
+def keyValueListFromAssociativeArray(document, *keys):
+    document = document.copy()
+
+    parent = None
+    aa = document
+    for k in keys:
+        parent = aa
+        aa = aa[k]
+
+    flatdoc = [{'key' : k, 'value' : v} for k, v in aa.iteritems()]
+    parent[keys[-1]] = flatdoc
+    return document
+
 def flattenAssociativeArray(document, *keys):
     document = document.copy()
 
