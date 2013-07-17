@@ -1,5 +1,6 @@
 from rest_resource import RestResource
 from bson.objectid import ObjectId
+import pprint
 
 class Analysis(RestResource):
     exposed = True
@@ -20,8 +21,11 @@ class Analysis(RestResource):
                                          'cosmo.analysistool.$' : 1})
         # This gets the whole entry for the simulation
         at = s['cosmo']['analysistool'][0]
+
+        params = Analysis.keyValueListToDictionary(at['value'])
+
         result = {'id' : analysis_id,
-                  'loadDataArgs' : [at['files'][-1]['file']],
+                  'loadDataArgs' : [params['files'][-1]['file']],
                   'name' : at['key']}
 
         return result
@@ -31,8 +35,10 @@ class Analysis(RestResource):
         analysistools = s['cosmo']['analysistool']
 
         def genEntry(a):
+            params = Analysis.keyValueListToDictionary(a['value'])
+
             try:
-                files = [a['files'][-1]['file']]
+                files = [params['files'][-1]['file']]
             except KeyError:
                 files = []
             return dict(name=a['key'], id=str(a['_id']), loadDataArgs=files)

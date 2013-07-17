@@ -1,5 +1,6 @@
 import cherrypy
 import json
+import itertools
 
 def ObjectIdConverter(oid):
     return str(oid)
@@ -11,6 +12,13 @@ class RestResource:
 
     def simplify(self, obj):
         return obj
+
+    @classmethod
+    def keyValueListToDictionary(cls, kvlist):
+        kvdict = dict(itertools.izip((p['key'] for p in kvlist),
+                                     (p['value'] for p in kvlist)))
+
+        return kvdict
 
     @classmethod
     def endpoint(cls, fun):
