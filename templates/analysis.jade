@@ -1,0 +1,10 @@
+.ct-analysis-tabs
+  ul.nav.nav-tabs
+    li.active
+      a(href="#ct-tab-analysis-visualize-#{analysis.id}", data-toggle="tab") Visualize
+    li
+      a(href="#ct-tab-analysis-params-#{analysis.id}", data-toggle="tab") Metadata
+
+.ct-analysis-tab-content.tab-content
+  .ct-visualize-wrapper.tab-pane.active(id="ct-tab-analysis-visualize-#{analysis.id}")
+  .ct-analysis-metadata-wrapper.tab-pane(id="ct-tab-analysis-params-#{analysis.id}")

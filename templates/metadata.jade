@@ -1,14 +1,17 @@
 .ct-metadata-wrapper
-  .ct-metadata-header
-    .row-fluid
-      .ct-table-cell.span6
-        span Name
-      .ct-table-cell.span6
-        span Value
-  .ct-metadata-body
-    each value, key in params
+  if params.length == 0
+    .ct-empty-set-message No metadata to display.
+  else
+    .ct-metadata-header
       .row-fluid
         .ct-table-cell.span6
-          span #{key}
+          span Name
         .ct-table-cell.span6
-          span #{value}
+          span Value
+    .ct-metadata-body
+      each param in params
+        .row-fluid
+          .ct-table-cell.span6
+            span #{param.key}
+          .ct-table-cell.span6
+            span #{param.value}

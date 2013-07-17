@@ -2,7 +2,7 @@ ct.models.Analysis = Backbone.Model.extend({
     id: null,
     name: null,
     loadDataArgs: null,
-    params: null,
+    params: [],
 
     validate: function(attrs) {
         if (attrs.loadDataArgs === null) {

@@ -27,7 +27,7 @@ ct.views.SimulationView = Backbone.View.extend({
     },
 
     analysisSelected: function (analysis) {
-        this.trigger('visualize', analysis);
+        this.trigger('analysisSelected', analysis);
         return this;
     }
 });

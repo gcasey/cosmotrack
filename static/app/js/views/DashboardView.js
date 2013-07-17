@@ -6,12 +6,12 @@ ct.views.DashboardView = Backbone.View.extend({
             el: '#ct-result-list-well'
         });
 
-        this.visualizeView = new ct.views.VisualizeView({
-            el: '#ct-visualize-well'
+        this.analysisView = new ct.views.AnalysisView({
+            el: '#ct-analysis-well'
         }).render();
 
-        this.resultListView.on('visualize', function (analysis) {
-            this.visualizeView.visualize(analysis);
+        this.resultListView.on('analysisSelected', function (analysis) {
+            this.analysisView.setModel(analysis);
         }, this);
 
         return this;

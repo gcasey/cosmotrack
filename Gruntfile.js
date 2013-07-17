@@ -31,6 +31,7 @@ module.exports = function (grunt) {
                 'app/js/models/Simulation.js',
                 'app/js/collections/AnalysisCollection.js',
                 'app/js/collections/SimulationCollection.js',
+                'app/js/views/AnalysisView.js',
                 'app/js/views/AnalysisListView.js',
                 'app/js/views/MetadataView.js',
                 'app/js/views/ResultListView.js',

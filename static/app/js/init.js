@@ -4,7 +4,7 @@ var ct = {
     models: {},
     collections: {},
     views: {},
-    apiRoot: '/api/v1/',
+    apiRoot: '/api/v1',
 
     restRequest: function (opts) {
         var defaults = {
@@ -24,7 +24,7 @@ var ct = {
                 ct.lastError = error;
             }
         };
-        opts.url = ct.apiRoot + opts.resource;
+        opts.url = ct.apiRoot + '/' + opts.resource;
 
         return Backbone.ajax($.extend(defaults, opts));
     }

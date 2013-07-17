@@ -55,7 +55,7 @@
         view.pvConfig = {
             sessionURL: view.pvSession.get('url'),
             id: view.pvSession.id,
-            sessionManagerURL: ct.apiRoot + 'pvsession',
+            sessionManagerURL: ct.apiRoot + '/pvsession',
             secret: view.pvSession.get('secret'),
             interactiveQuality: 60
         };

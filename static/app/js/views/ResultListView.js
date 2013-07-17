@@ -34,8 +34,8 @@ ct.views.ResultListView = Backbone.View.extend({
             new ct.views.SimulationView({
                 el: container,
                 model: this.collection.get(simulationId),
-            }).on('visualize', function (analysis) {
-                this.trigger('visualize', analysis);
+            }).on('analysisSelected', function (analysis) {
+                this.trigger('analysisSelected', analysis);
             }, this);
         }
     }

@@ -11,7 +11,7 @@ ct.views.AnalysisListView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(jade.templates.analyses({
+        this.$el.html(jade.templates.analysis_list({
             analyses: this.analyses.models
         }));
         return this;

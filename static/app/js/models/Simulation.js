@@ -3,5 +3,5 @@ ct.models.Simulation = Backbone.Model.extend({
     name: null,
     site: null,
     user: null,
-    params: null
+    params: []
 });

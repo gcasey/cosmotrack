@@ -15,9 +15,9 @@ body
 
 h2.ct-view-header
   color $titleColor
-  margin 0
+  margin 0 0 8px
   font-size 22px
-  line-height 1.4
+  line-height 1
 
 h3.ct-accordion-header
   font-size 13px
@@ -34,6 +34,9 @@ h3.ct-accordion-header
 a
   cursor pointer
 
+.nav-tabs > li a
+  color #222
+
 /*
  * Widget customization: ct-action-list-widget
  */
@@ -44,36 +47,29 @@ ul.ct-action-list-widget
   padding 0
   box-shadow 0 1px 4px 0 rgba(0,0,0,0.1)
   border-radius $listBorderRadius
-
-ul.ct-action-list-widget > li > a > .icon-chevron-right
-  float right
-  margin-top 2px
-  margin-right -6px
-  opacity .4
-
-ul.ct-action-list-widget > li:hover > a > .icon-chevron-right
-  opacity .7
-
-ul.ct-action-list-widget > li.active > a > .icon-chevron-right
-  opacity 1
-
-ul.ct-action-list-widget > li > a
-  display block
-  margin 0 0 -1px
-  padding 6px 12px
-  border 1px solid #e5e5e5
-
-ul.ct-action-list-widget > li:first-child > a
-  border-radius $listBorderRadius $listBorderRadius 0 0
-
-ul.ct-action-list-widget > li:last-child > a
-  border-radius 0 0 $listBorderRadius $listBorderRadius
-
-ul.ct-action-list-widget > .active > a
-  position relative
-  z-index 2
-  padding 7px 13px
-  border 0
+  > li > a
+    display block
+    margin 0 0 -1px
+    padding 6px 12px
+    border 1px solid #e5e5e5
+  > li:first-child > a
+    border-radius $listBorderRadius $listBorderRadius 0 0
+  > li:last-child > a
+    border-radius 0 0 $listBorderRadius $listBorderRadius
+  > li.active > a
+    position relative
+    z-index 2
+    padding 7px 13px
+    border 0
+  > li > a > .icon-chevron-right
+    float right
+    margin-top 2px
+    margin-right -6px
+    opacity .4
+  > li:hover > a > .icon-chevron-right
+    opacity .7
+  > li.active > a > .icon-chevron-right
+    opacity 1
 
 /*
  * Rules for scaffolding tables
