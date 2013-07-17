@@ -10,3 +10,12 @@ div.ct-metadata-body
     background-color #f3f3f3
   .row-fluid:nth-child(even)
     background-color white
+
+/*
+ * Force metadata columns inline when responsive
+ * shrinks things.
+ */
+@media (max-width: 767px)
+  div.ct-metadata-wrapper .ct-table-cell
+    width 50%
+    float left
