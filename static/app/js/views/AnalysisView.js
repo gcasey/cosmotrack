@@ -29,7 +29,6 @@ ct.views.AnalysisView = Backbone.View.extend({
         this.model = analysis;
         this.visualizeView.visualize(analysis);
         this.metadataView.model = analysis;
-        console.log(this.metadataView.model);
         this.metadataView.render();
     }
 });

@@ -41,6 +41,6 @@ class Analysis(RestResource):
                 files = [params['files'][-1]['file']]
             except KeyError:
                 files = []
-            return dict(name=a['key'], id=str(a['_id']), loadDataArgs=files)
+            return dict(name=a['key'], id=str(a['_id']), loadDataArgs=files, params=params)
 
         return [genEntry(a) for a in analysistools]

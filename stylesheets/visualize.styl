@@ -1,10 +1,12 @@
+$translucentOverlay = rgba(255, 255, 255, 0.92)
+
 #ct-render-container
   height 400px
   background-color black
   position relative
 
 div.ct-pvw-overlay
-  background-color rgba(255, 255, 255, 0.85)
+  background-color $translucentOverlay
   position absolute
   top 15px
   left 15px
@@ -12,8 +14,15 @@ div.ct-pvw-overlay
   padding 5px 10px
   border-radius 4px
   font-size 14px
-  border 1px solid grey
+  border 1px solid #aaa
 
 img.ct-pvw-loading
   display none
   margin-right 5px
+
+.ct-visualize-control-container
+  margin-top 6px
+  float right
+  .dropdown-menu
+    background-color $translucentOverlay
+    margin-bottom 5px

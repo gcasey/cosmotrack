@@ -5,6 +5,13 @@
             this.$status = this.$('span.ct-pvw-status-message');
             this.$overlay = this.$('.ct-pvw-overlay');
             this.$loading = this.$('img.ct-pvw-loading');
+
+            this.colorByView = new ct.views.ColorByView({
+                el: this.$('.ct-color-by-container')
+            }).on('arrayNameSelected', function (arrayName) {
+                this.colorBy(arrayName);
+            }, this).render();
+
             return this;
         },
 
@@ -44,6 +51,19 @@
 
         hideStatus: function () {
             this.$overlay.hide();
+        },
+
+        colorBy: function (params) {
+            var that = this;
+            this.showStatus('Changing color function...', true);
+            this.pvConnection.session.call('pv:colorBy', params.name, params.min, params.max)
+              .then(function () {
+                that.viewport.render();
+                that.hideStatus();
+            }).otherwise(function (err) {
+                that.showStatus('An error occurred.');
+                console.log(err);
+            });
         }
     });
 
@@ -68,6 +88,9 @@
             bindStop(view.pvConfig);
             loadAnalysis(view);
         }, function(code, msg) {
+            view.pvConnection = null;
+            view.pvSession = null;
+            view.viewport.unbind();
             view.showStatus('Connection closed.');
             view.trigger('pvclosed', code, msg);
         });
@@ -83,7 +106,9 @@
         view.showStatus('Loading analysis data...', true);
 
         view.pvConnection.session.call('pv:loadData', args)
-            .then(function () {
+            .then(function (retVal) {
+                view.colorByView.arrayList = retVal.infoArrays;
+                view.colorByView.render();
                 view.viewport.render();
                 view.hideStatus();
             }).otherwise(function (err) {

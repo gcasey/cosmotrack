@@ -57,6 +57,7 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
 
         # Update authentication key to use
         self.updateSecret(authKey)
+        self.scalarBar = None
 
     @exportRpc("loadData")
     def loadData(self, filename):
@@ -65,10 +66,15 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
         its fileid and a list of available information arrays
         with type information.
         """
+        global view
+
         try:
             simple.Delete()
         except:
             pass
+        if(self.scalarBar is not None):
+            view.Representations.remove(self.scalarBar)
+
         self.src = simple.OpenDataFile(filename)
         self.rep = simple.Show()
         simple.Render()
@@ -79,22 +85,41 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
                       self.src.GetCellDataInformation())
         infoArrays = []
         for idx in range(0, pdi.GetNumberOfArrays()):
+            infoArray = pdi.GetArray(idx)
             infoArrays.append({
                 'type' : 'Point',
-                'name' : pdi.GetArray(idx).Name
+                'name' : infoArray.Name,
+                'range' : infoArray.GetRange()
                 })
         for idx in range(0, cdi.GetNumberOfArrays()):
+            infoArray = cdi.GetArray(idx)
             infoArrays.append({
                 'type' : 'Cell',
-                'name' : cdi.GetArray(idx).Name
+                'name' : infoArray.Name,
+                'range' : infoArray.GetRange()
                 })
 
         return {'fileId' : fileid,
                 'infoArrays' : infoArrays}
 
     @exportRpc("colorBy")
-    def colorBy(self, colorArrayName):
+    def colorBy(self, colorArrayName, min, max):
+        global view
+        colorArrayName = colorArrayName.encode('ascii', 'ignore')
+        lut = simple.MakeBlueToRedLT(min, max)
+
+        if(self.scalarBar is not None):
+            view.Representations.remove(self.scalarBar)
+
+        self.scalarBar = simple.CreateScalarBar(Title=colorArrayName, LabelFontSize=12,
+            Enabled=1, LookupTable=lut, TitleFontSize=12)
+
+
+        view.Representations.append(self.scalarBar)
+
         self.rep.ColorArrayName = colorArrayName
+        self.rep.LookupTable = lut
+
         simple.Render()
 
 if __name__ == "__main__":

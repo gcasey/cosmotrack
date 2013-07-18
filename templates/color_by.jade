@@ -1,0 +1,11 @@
+.btn-group.dropup
+  a.ct-color-by-button.btn.btn-primary.disabled.dropdown-toggle(data-toggle="dropdown") Color By&nbsp;
+    span.caret
+  ul.ct-color-by-list.dropdown-menu.pull-right
+    each arrayInfo in arrayList
+      li
+        a(name="#{arrayInfo.name}", type="#{arrayInfo.type}",
+          min="#{arrayInfo.range[0]}", max="#{arrayInfo.range[1]}",
+          tabindex="-1")
+          img(src="/static/app/img/arrayInfo-#{arrayInfo.type}.png")
+          |  #{arrayInfo.name}
