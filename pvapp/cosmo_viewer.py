@@ -60,17 +60,42 @@ class CosmoApp(paraviewweb_wamp.ServerProtocol):
 
     @exportRpc("loadData")
     def loadData(self, filename):
+        """
+        Loads the data specified by filename, and returns
+        its fileid and a list of available information arrays
+        with type information.
+        """
         try:
             simple.Delete()
         except:
             pass
-        reader = simple.OpenDataFile(filename)
-        simple.Show()
+        self.src = simple.OpenDataFile(filename)
+        self.rep = simple.Show()
         simple.Render()
         simple.ResetCamera()
-        fileid = reader.GetGlobalIDAsString()
+        fileid = self.src.GetGlobalIDAsString()
 
-        return fileid
+        (pdi, cdi) = (self.src.GetPointDataInformation(),
+                      self.src.GetCellDataInformation())
+        infoArrays = []
+        for idx in range(0, pdi.GetNumberOfArrays()):
+            infoArrays.append({
+                'type' : 'Point',
+                'name' : pdi.GetArray(idx).Name
+                })
+        for idx in range(0, cdi.GetNumberOfArrays()):
+            infoArrays.append({
+                'type' : 'Cell',
+                'name' : cdi.GetArray(idx).Name
+                })
+
+        return {'fileId' : fileid,
+                'infoArrays' : infoArrays}
+
+    @exportRpc("colorBy")
+    def colorBy(self, colorArrayName):
+        self.rep.ColorArrayName = colorArrayName
+        simple.Render()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
